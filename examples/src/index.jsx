@@ -47,10 +47,7 @@ function App() {
     <VRCanvas>
       <ambientLight intensity={0.5} />
       <pointLight position={[5, 5, 5]} />
-      <Hands
-      // modelLeft="/hand-left.gltf"
-      // modelRight="/hand-right.gltf"
-      />
+      <Hands modelLeft="/hand-left.gltf" modelRight="/hand-right.gltf" />
       <Button position={[0, 0.8, -1]} />
       <DefaultXRControllers />
       {false && <PlayerExample />}

@@ -7,21 +7,21 @@ import { usePlane, useBox, Physics, useSphere } from '@react-three/cannon'
 import { joints } from './joints'
 import './styles.css'
 
-function Cube({ position, args = [0.06, 0.06, 0.06] }: any) {
+function Cube({ position, args = [0.06, 0.06, 0.06] }) {
   const [boxRef] = useBox(() => ({ position, mass: 1, args }))
   const [tex] = useMatcapTexture('C7C0AC_2E181B_543B30_6B6270')
 
   return (
-    <Box ref={boxRef} args={args as any} castShadow>
-      <meshMatcapMaterial attach="material" matcap={tex as any} />
+    <Box ref={boxRef} args={args} castShadow>
+      <meshMatcapMaterial attach="material" matcap={tex} />
     </Box>
   )
 }
 
-function JointCollider({ index, hand }: { index: number; hand: number }) {
+function JointCollider({ index, hand }) {
   const { gl } = useThree()
-  const handObj = (gl.xr as any).getHand(hand)
-  const joint = handObj.joints[joints[index]] as any
+  const handObj = gl.xr.getHand(hand)
+  const joint = handObj.joints[joints[index]]
   const size = joint.jointRadius ?? 0.0001
   const [tipRef, api] = useSphere(() => ({ args: size, position: [-1, 0, 0] }))
   useFrame(() => {
@@ -36,15 +36,15 @@ function JointCollider({ index, hand }: { index: number; hand: number }) {
   )
 }
 
-function HandsReady(props: any) {
+function HandsReady(props) {
   const [ready, setReady] = useState(false)
   const { gl } = useThree()
   useEffect(() => {
     if (ready) return
-    const joint = (gl.xr as any).getHand(0).joints['index-finger-tip']
+    const joint = gl.xr.getHand(0).joints['index-finger-tip']
     if (joint?.jointRadius !== undefined) return
     const id = setInterval(() => {
-      const joint = (gl.xr as any).getHand(0).joints['index-finger-tip']
+      const joint = gl.xr.getHand(0).joints['index-finger-tip']
       if (joint?.jointRadius !== undefined) {
         setReady(true)
       }
@@ -55,7 +55,7 @@ function HandsReady(props: any) {
   return ready ? props.children : null
 }
 
-const HandsColliders = (): any =>
+const HandsColliders = () =>
   [...Array(25)].map((_, i) => (
     <Fragment key={i}>
       <JointCollider index={i} hand={0} />
